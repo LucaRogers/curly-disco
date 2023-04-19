@@ -1,0 +1,109 @@
+import pickle
+
+# Define Room class
+class Room:
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+        self.items = []
+        self.exits = {}
+
+    def add_exit(self, direction, room):
+        self.exits[direction] = room
+
+    def add_item(self, item):
+        self.items.append(item)
+
+    def remove_item(self, item):
+        self.items.remove(item)
+
+
+# Define Item class
+class Item:
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+
+# Define Player class
+class Player:
+    def __init__(self):
+        self.inventory = []
+
+    def add_item(self, item):
+        self.inventory.append(item)
+
+    def remove_item(self, item):
+        self.inventory.remove(item)
+
+
+# Define Game class
+class Game:
+    def __init__(self):
+        self.rooms = {}
+        self.player = Player()
+        self.current_room = None
+
+    def add_room(self, room):
+        self.rooms[room.name] = room
+
+    def set_starting_room(self, room):
+        self.current_room = room
+
+    def move(self, direction):
+        if direction in self.current_room.exits:
+            self.current_room = self.current_room.exits[direction]
+            print(self.current_room.description)
+        else:
+            print("You cannot go that way.")
+
+    def look_around(self):
+        print("You are in " + self.current_room.name)
+        print(self.current_room.description)
+        if len(self.current_room.items) > 0:
+            print("You see the following items:")
+            for item in self.current_room.items:
+                print("- " + item.name)
+        else:
+            print("There are no items in this room.")
+
+    def take_item(self, item_name):
+        for item in self.current_room.items:
+            if item.name == item_name:
+                self.player.add_item(item)
+                self.current_room.remove_item(item)
+                print("You took " + item_name)
+                return
+        print("There is no " + item_name + " in this room.")
+
+    def use_item(self, item_name):
+        for item in self.player.inventory:
+            if item.name == item_name:
+                print("You used " + item_name)
+                return
+        print("You do not have " + item_name + " in your inventory.")
+
+    def save_game(self, filename):
+        with open(filename, 'wb') as file:
+            pickle.dump(self, file)
+
+    @staticmethod
+    def load_game(filename):
+        with open(filename, 'rb') as file:
+            game = pickle.load(file)
+        return game
+
+
+# Create rooms
+room1 = Room("Castle Courtyard", "You are in the castle courtyard. The sun is shining.")
+room2 = Room("Armory", "You are in the armory. There are various weapons and armor on display.")
+room3 = Room("Library", "You are in the library. There are shelves of dusty books.")
+room4 = Room("Dungeon", "You are in the dungeon. It's dark and damp.")
+
+# Add exits to rooms
+room1.add_exit("north", room2)
+room2.add_exit("south", room1)
+room2.add_exit("north", room3)
+room3.add_exit("south", room2)
+room3.add_exit("north", room4)
+room4.add_exit("south", room3)
