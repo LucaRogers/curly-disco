@@ -1,3 +1,10 @@
+ACTIONS=("quit",
+		 "save",
+		 "load",
+		 "get",
+		 "use",
+		 "move")
+
 class Player:
      def __init__(self, name):
         self.inventory = []
@@ -14,4 +21,36 @@ class Player:
 
 class Item:
     def __init__(self, name, description):
-        self.name
+        self.name = name
+        self.description = description
+
+class Room:
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+    
+    def add_item(self, item):
+        self.items.append(item)
+        
+key1 = Item("key", "An ordinary key lies on a table.")
+key2 = Item("key", "A wooden key lies on the floor.")
+sword = Item("Sword", "A sharp sword covered with jewels.")
+note = Item("Note", "If you want to continue you must prove your wits solve this riddle to find the location of the princess.\nI am dark and damp, deep beneath the ground,\nMany a prisoner here can be found.\nWith walls of stone and bars of steel,\nMy confines can make the bravest man kneel.")
+potionD = ("Potion of Invisibility", "Use me to move unsean. But be careful you only get one shot.")
+princess = ("Princess", "A beautiful young lady.")
+start_room = Room("Great Hall", "A grand room with high ceilings, long tables, and a large fireplace. This is where feasts are held and guests are entertained.")
+throne_room = Room("Throne Rooom", "A lavishly decorated room with a high-backed throne at one end. This is where the king or queen holds court and receives important guests.")
+armory = Room("Armory", "A room filled with weapons and armor, from swords and shields to chainmail and plate armor. There is one particular sword that stands out.")
+chapel = Room("Chapel", "A peaceful room with stained-glass windows and religious artifacts. This is where the castle's inhabitants come to pray and attend religious services.")
+kitchen = Room("Kitcen", "An abbondoned kitchen that still smells like freshly baked bread.")
+bedchamber = Room("Bedchamber", "A cozy room with a large bed and a fireplace.")
+servants_quarters = Room("Servants' Quarters", "A cramped room filled with cots and bunk beds. Nobody seems to be here anymore.")
+library = ("Library", "A quiet room filled with shelves of books and manuscripts.")
+dungeon = ("Dungeon", "A dark, dank room deep beneath the castle, filled with torture devices.")
+
+current_room = start_room
+player = Player()
+
+while ACTIONS != "quit":
+    
+    
