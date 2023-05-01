@@ -1,4 +1,4 @@
-class Room:
+class Room():
     def __init__(self, name, description, exits, items=[]):
         self.name = name
         self.description = description
@@ -16,7 +16,7 @@ class Room:
             for item in self.items:
                 print(item)
         
-class Game:
+class Game():
     def __init__(self):
         self.rooms = []
         self.current_room = None
@@ -32,8 +32,8 @@ class Game:
     def play(self):
         while True:
             self.current_room.display()
-            command = input("What would you like to do? ")
             print("Input 'get' and then item name to pick up item.")
+            command = input("What would you like to do?\n")
             
             if command in self.current_room.exits:
                 for room in self.rooms:
@@ -67,8 +67,6 @@ room6 = Room("Treasure Room", "You have found the treasure room!", {}, ["treasur
 room7 = Room("Garden", "You are standing in a beautiful garden with colorful flowers.", {"east": "Fountain", "south": "Entrance"}, ["watering can"])
 room8 = Room("Fountain", "You are standing in front of a grand fountain.", {"west": "Garden", "north": "Patio"}, ["coin"])
 room9 = Room("Patio", "You are standing in a cozy patio.", {"south": "Fountain", "east": "Pool"})
-room10 = Room("Pool", "You are standing in front of a large swimming pool.", {"west": "Patio", "north": "Hot Tub"})
-room11 = Room("Hot Tub", "You are relaxing in a hot tub.", {"south": "Pool", "east": "Sauna"}, ["bottle"])
 
 game = Game()
 game.add_room(room1)
@@ -80,8 +78,6 @@ game.add_room(room6)
 game.add_room(room7)
 game.add_room(room8)
 game.add_room(room9)
-game.add_room(room10)
-game.add_room(room11)
 
 game.start()
 
