@@ -1,20 +1,31 @@
 import pickle
+import sys
 import time
 
+def type_out_text(text):
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(0.05)
+    print()
+
 playerName = input("What is your name?")
-print(f"Welcome {playerName} to this adventure. You will have to face your fears on todays journey.\nYou are a knight in a castle searching for his kings lost treasure.")
-print("The castle has been taken over by an evil sorcerer. You must succesfully defeat him in order to aquire the treasure.")
-instructions = print("""\nINSTRUCTIONS
-To navigate the caslte, simply type the directon of one of the available exits.
+type_out_text(f"Welcome {playerName} to this adventure. You will have to face your fears on today's journey.")
+type_out_text("You are a knight in a castle searching for his king's lost treasure.")
+type_out_text("The castle has been taken over by an evil sorcerer. You must successfully defeat him in order to acquire the treasure.")
+instructions = """\nINSTRUCTIONS
+To navigate the castle, simply type the direction of one of the available exits.
 (Ex. 'north, south, east, west')
 To pick an item, input 'get' and the name of the item.
 To use an item input 'use' and then the item name.
 To save input 'save' to load input 'load'.
-To see this message again input 'help'""")
+To see this message again input 'help'"""
+type_out_text(instructions)
 input("Are you ready to begin this epic quest?\n")
 time.sleep(2)
-print("I don't care if you are or not because you don't really have an option...Good luck!")
+type_out_text("I don't care if you are or not because you don't really have an option...Good luck!")
 time.sleep(1)
+
 
 class Room():
     def __init__(self, name, description, exits, items = []):
