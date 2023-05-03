@@ -84,6 +84,13 @@ class Game():
                     self.inventory.remove("sword")
                     self.inventory.append("Key")
                 
+                elif item_name == "potion" and "potion" in self.inventory and self.current_room.name == "Sorcerers Room":
+                    print("You use the potion. It startles the cloaked figure.\nOut of fear it turns around and slashes you with a sword.\nBetter luck next time.")
+                    break
+                
+                elif item_name == "potion" and "potion" in self.inventory:
+                    print("You drink the potion. Nothing seems to have happened.\nI guess that was useless.")
+                    self.inventory.remove("potion")
                 
                     
                 else:
@@ -105,9 +112,9 @@ room11 = Room("Oratory", "A private chapel.", {"east": "Foyer", "north": "Storer
 room12 = Room("Storeroom", "A room full of empty shelves.", {"south": "Oratory"})
 room13 = Room("Cellar", "Full of cobwebs and unused storage space. It smells like moldy cheese.\nWait a second...An old man asks for some food.", {"north": "Oratory"})
 room14 = Room("Dungeon Entrance", "Small and steep stairs lead you down the dark dungeon.", {"west": "Gaurdroom", "east": "Dungeon Cell", })
-room15 = Room("Dungeon Cell", "You are closed off by iron bars. But wait... It looks like somebody broke through.\nIn the corner you see a man offering you a trade.", {"west": "Dungeon Entrance", "east":"Dungeon Hall "})
-room16 = Room("Torture Chamber ", "A dead man lays in a corner. There is a basket of heads near a guillotine. They look fresh.\nThere is no turning back now", {"": " ", "": ""})
-room17 = Room("Dungeon Hallway", "It is very tight and oddly quiet. It smells odd.", {"south": "Sorcerers Room"})
+room15 = Room("Dungeon Cell", "You are closed off by iron bars. But wait... It looks like somebody broke through.\nThere is a cloaked figure in the corner.", {"west": "Dungeon Entrance", "east":"Dungeon Hall "})
+room16 = Room("Torture Chamber ", "A dead man lays in a corner. There is a basket of heads near a guillotine. They look fresh.\nThere is no turning back now", {"south": "Sorcerers Room"})
+room17 = Room("Dungeon Hallway", "It is very tight and oddly quiet. It smells odd.", {"west": "Dungeon Cell", "east": "Torture Chamber"})
 room18 = Room("Sorcerers Room", "There is a powerful Sorcerer ready to kill you. You must defend yourself.", {"south": "Treasure Room"})
 room19 = Room("Treasure Room", "You have found the treasure room!", {}, ["treasure chest"])      
 
