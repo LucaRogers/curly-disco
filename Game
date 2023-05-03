@@ -1,4 +1,20 @@
 import pickle
+import time
+
+playerName = input("What is your name?")
+print(f"Welcome {playerName} to this adventure. You will have to face your fears on todays journey.\nYou are a knight in a castle searching for his kings lost treasure.")
+print("The castle has been taken over by an evil sorcerer. You must succesfully defeat him in order to aquire the treasure.")
+instructions = print("""\nINSTRUCTIONS
+To navigate the caslte, simply type the directon of one of the available exits.
+(Ex. 'north, south, east, west')
+To pick an item, input 'get' and the name of the item.
+To use an item input 'use' and then the item name.
+To save input 'save' to load input 'load'.
+To see this message again input 'help'""")
+input("Are you ready to begin this epic quest?\n")
+time.sleep(2)
+print("I don't care if you are or not because you don't really have an option...Good luck!")
+time.sleep(1)
 
 class Room():
     def __init__(self, name, description, exits, items = []):
@@ -35,7 +51,6 @@ class Game():
     def play(self):
         while True:
             self.current_room.display()
-            print("Input 'get' and then item name to pick up item.")
             command = input("What would you like to do?\n")
             if command in self.current_room.exits:
                  for room in self.rooms:
@@ -55,9 +70,10 @@ class Game():
                     print("Game loaded.")
                 except FileNotFoundError:
                     print("No save file found.")
-                
-
-                    
+            
+            elif command == "instructions":
+                print(instructions)
+        
             elif command.startswith("get "):
                 item_name = command[4:]
                 
