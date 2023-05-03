@@ -63,7 +63,7 @@ class Game():
     def play(self):
         while True:
             self.current_room.display()
-            command = input("What would you like to do?\n")
+            command = type_out_text("\nWhat would you like to do?\n")
             if command in self.current_room.exits:
                  for room in self.rooms:
                     if room.name == self.current_room.exits[command]:
@@ -73,18 +73,18 @@ class Game():
             elif command == "save":
                 with open("save_game.pickle", "wb") as f:
                     pickle.dump((self.current_room, self.inventory), f)
-                print("Game saved.")
+                type_out_text("Game saved.")
                     
             elif command == "load":
                 try:
                     with open("save_game.pickle", "rb") as f:
                         self.current_room, self.inventory = pickle.load(f)
-                    print("Game loaded.")
+                    type_out_text("Game loaded.")
                 except FileNotFoundError:
-                    print("No save file found.")
+                    type_out_text("No save file found.")
             
             elif command == "instructions":
-                print(instructions)
+                type_out_text(instructions)
         
             elif command.startswith("get "):
                 item_name = command[4:]
@@ -92,53 +92,53 @@ class Game():
                 if item_name in self.current_room.items:
                     self.inventory.append(item_name)
                     self.current_room.items.remove(item_name)
-                    print(f"You have picked up {item_name}.")
+                    type_out_text(f"You have picked up {item_name}.")
                     
                 else:
-                    print(f"{item_name} is not in this room.")
+                    type_out_text(f"{item_name} is not in this room.")
                     
             elif command.startswith("use "):
                 item_name = command[4:]
                 
                 if item_name == "Key" and "key" in self.inventory and self.current_room.name == "Treasure Room":
-                    print("Congratulations! You have unlocked the treasure chest and found the treasure!")
+                    type_out_text("Congratulations! You have unlocked the treasure chest and found the treasure!")
                     break
                 
                 elif item_name == "book" and "book" in self.inventory and self.current_room.name == "Library":
-                    print("You read a page of the book. It talks about an ancient potion of invisbility.\n")
+                    type_out_text("You read a page of the book. It talks about an ancient potion of invisbility.\n")
                     self.inventory.remove("book")
                     
                 elif item_name == "food" and "food" in self.inventory and self.current_room.name == "Cellar":
-                    print("You give an old man some food. He thanks you by giving you a gold coin.")
+                    type_out_text("You give an old man some food. He thanks you by giving you a gold coin.")
                     self.inventory.append("coin")
                     
                 elif item_name == "coin" and "coin" in self.inventory and self.current_room.name == "Dungeon":
-                    print("You pay a man and he gives you a potion in return\n")
+                    type_out_text("You pay a man and he gives you a potion in return\n")
                     self.inventory.remove("coin")
                     self.inventory.append("potion")
                 
                 elif item_name == "sword" and "sword" in self.inventory and self.current_room.name == "Cellar":
-                    print("The old man was your only chance...You lose.")
+                    type_out_text("The old man was your only chance...You lose.")
                     break
                     
                 elif item_name == "sword" and "sword" in self.inventory and self.current_room.name == "Sorcerers Room":
-                    print("You stab the Sorcerer. He is dead. A key falls out of his cloak.\nYou take it.")
+                    type_out_text("You stab the Sorcerer. He is dead. A key falls out of his cloak.\nYou take it.")
                     self.inventory.remove("sword")
                     self.inventory.append("Key")
                 
                 elif item_name == "potion" and "potion" in self.inventory and self.current_room.name == "Sorcerers Room":
-                    print("You use the potion. It startles the cloaked figure.\nOut of fear it turns around and slashes you with a sword.\nBetter luck next time.")
+                    type_out_text("You use the potion. It startles the cloaked figure.\nOut of fear it turns around and slashes you with a sword.\nBetter luck next time.")
                     break
                 
                 elif item_name == "potion" and "potion" in self.inventory:
-                    print("You drink the potion. Nothing seems to have happened.\nI guess that was useless.")
+                    type_out_text("You drink the potion. Nothing seems to have happened.\nI guess that was useless.")
                     self.inventory.remove("potion")
                 
                     
                 else:
-                    print("You can't use that here.")
+                    type_out_text("You can't use that here.")
             else:
-                print("Invalid command.")
+                type_out_text("Invalid command.")
                 
 room1 = Room("Entrance", "You are standing in front of a castle entrance.", {"north": "Foyer"})
 room2 = Room("Foyer", "You are standing in a grand foyer.", {"north": "Library", "east": "Dining Room", "south": "Entrance", "west": "Oratory"})
