@@ -35,12 +35,14 @@ class Game():
             self.current_room.display()
             print("Input 'get' and then item name to pick up item.")
             command = input("What would you like to do?\n")
-            
             if command in self.current_room.exits:
-                for room in self.rooms:
+                 for room in self.rooms:
                     if room.name == self.current_room.exits[command]:
                         self.current_room = room
                         break
+    
+                
+
                     
             elif command.startswith("get "):
                 item_name = command[4:]
@@ -56,7 +58,7 @@ class Game():
             elif command.startswith("use "):
                 item_name = command[4:]
                 
-                if item_name == "key" and "key" in self.inventory and self.current_room.name == "Treasure Room":
+                if item_name == "Key" and "key" in self.inventory and self.current_room.name == "Treasure Room":
                     print("Congratulations! You have unlocked the treasure chest and found the treasure!")
                     break
                 
@@ -64,9 +66,32 @@ class Game():
                     print("You read a page of the book. It talks about an ancient potion of invisbility.\n")
                     self.inventory.remove("book")
                     
+                elif item_name == "food" and "food" in self.inventory and self.current_room.name == "Cellar":
+                    print("You give an old man some food. He thanks you by giving you a gold coin.")
+                    self.inventory.append("coin")
+                    
                 elif item_name == "coin" and "coin" in self.inventory and self.current_room.name == "Dungeon":
                     print("You pay a man and he gives you a potion in return\n")
                     self.inventory.remove("coin")
+                    self.inventory.append("potion")
+                
+                elif item_name == "sword" and "sword" in self.inventory and self.current_room.name == "Cellar":
+                    print("The old man was your only chance...You lose.")
+                    break
+                    
+                elif item_name == "sword" and "sword" in self.inventory and self.current_room.name == "Sorcerers Room":
+                    print("You stab the Sorcerer. He is dead. A key falls out of his cloak.\nYou take it.")
+                    self.inventory.remove("sword")
+                    self.inventory.append("Key")
+                
+                elif item_name == "potion" and "potion" in self.inventory and self.current_room.name == "Sorcerers Room":
+                    print("You use the potion. It startles the cloaked figure.\nOut of fear it turns around and slashes you with a sword.\nBetter luck next time.")
+                    break
+                
+                elif item_name == "potion" and "potion" in self.inventory:
+                    print("You drink the potion. Nothing seems to have happened.\nI guess that was useless.")
+                    self.inventory.remove("potion")
+                
                     
                 else:
                     print("You can't use that here.")
@@ -76,22 +101,22 @@ class Game():
 room1 = Room("Entrance", "You are standing in front of a castle entrance.", {"north": "Foyer"})
 room2 = Room("Foyer", "You are standing in a grand foyer.", {"north": "Library", "east": "Dining Room", "south": "Entrance", "west": "Oratory"})
 room3 = Room("Library", "You are standing in a large library.", {"south": "Foyer"}, ["book"])
-room4 = Room("Dining Room", "You are standing in a spacious dining room.", {"west": "Foyer", "south": "Kitchen"}, ["key"])
+room4 = Room("Dining Room", "You are standing in a spacious dining room.", {"west": "Foyer", "south": "Kitchen"})
 room5 = Room("Kitchen", "You are standing in a busy kitchen.", {"north": "Dining Room", "east": "Garden"}, ["food"])    
 room6 = Room("Garden", "You are standing in a beautiful garden with colorful flowers.", {"east": "Fountain", "west": "Kitchen"})
-room7 = Room("Fountain", "You are standing in front of a grand fountain.", {"west": "Garden", "north": "Bedroom"}, ["coin"])
+room7 = Room("Fountain", "You are standing in front of a grand fountain.", {"west": "Garden", "north": "Bedroom"})
 room8 = Room("Bedroom", "There is an empty bed that is neatly made.", {"north": "Lavatories", "south": "Fountain", "east": "Gaurdroom"})
 room9 = Room("Lavatories", "Nothing but an odd smell.", {"south": "Bedroom"})
 room10 = Room("Gaurdroom", "Full of armor and a shiny sword.", {"west": "Bedroom", "east": "Dungeon Entrance"}, ["sword"])
 room11 = Room("Oratory", "A private chapel.", {"east": "Foyer", "north": "Storeroom", "south": "Cellar"})
 room12 = Room("Storeroom", "A room full of empty shelves.", {"south": "Oratory"})
-room13 = Room("Cellar", "Full of cobwebs and unused storage space. It smells like moldy cheese.", {"north": "Oratory"})
-room14 = Room("Dungeon Entrance", "Small and steep stairs lead you down the dark dungeon.", {"": "", "": " ", "": ""})
-room15 = Room("Dungeon Cell", "You are closed off by iron bars. But wait... It looks like somebody broke through.", {"": "", "": " ", "": ""})
-room16 = Room("Torture Chamber ", "A dead man lays in a corner. There is a basket of heads near a guillotine. They look fresh.\nThere is no turning back now", {"": " ", "": ""})
-room17 = Room("Dungeon Hallway", "It is very tight and oddly quiet. It smells odd.", {"": "", "": " ", "": ""})
-room18 = Room("Sorcerers Room", "There is a powerful Sorcerer ready to kill you. You must defend yourself.", {"": "", "": " ", "": ""})
-room19 = Room("Treasure Room", "You have found the treasure room!", {}, ["treasure chest"])
+room13 = Room("Cellar", "Full of cobwebs and unused storage space. It smells like moldy cheese.\nWait a second...An old man asks for some food.", {"north": "Oratory"})
+room14 = Room("Dungeon Entrance", "Small and steep stairs lead you down the dark dungeon.", {"west": "Gaurdroom", "east": "Dungeon Cell", })
+room15 = Room("Dungeon Cell", "You are closed off by iron bars. But wait... It looks like somebody broke through.\nThere is a cloaked figure in the corner.", {"west": "Dungeon Entrance", "east":"Dungeon Hall "})
+room16 = Room("Torture Chamber ", "A dead man lays in a corner. There is a basket of heads near a guillotine. They look fresh.\nThere is no turning back now", {"south": "Sorcerers Room"})
+room17 = Room("Dungeon Hallway", "It is very tight and oddly quiet. It smells odd.", {"west": "Dungeon Cell", "east": "Torture Chamber"})
+room18 = Room("Sorcerers Room", "There is a powerful Sorcerer ready to kill you. You must defend yourself.", {"south": "Treasure Room"})
+room19 = Room("Treasure Room", "You have found the treasure room!", {}, ["treasure chest"])      
 
 game = Game()
 game.add_room(room1)
