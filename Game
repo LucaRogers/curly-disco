@@ -1,3 +1,5 @@
+import pickle
+
 class Room():
     def __init__(self, name, description, exits, items = []):
         self.name = name
@@ -40,7 +42,19 @@ class Game():
                     if room.name == self.current_room.exits[command]:
                         self.current_room = room
                         break
-    
+            
+            elif command == "save":
+                with open("save_game.pickle", "wb") as f:
+                    pickle.dump((self.current_room, self.inventory), f)
+                print("Game saved.")
+                    
+            elif command == "load":
+                try:
+                    with open("save_game.pickle", "rb") as f:
+                        self.current_room, self.inventory = pickle.load(f)
+                    print("Game loaded.")
+                except FileNotFoundError:
+                    print("No save file found.")
                 
 
                     
