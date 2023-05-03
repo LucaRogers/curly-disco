@@ -1,95 +1,117 @@
-import time
-
-class Room:
-    def __init__(self, name, description, exits, items):
+class Room():
+    def __init__(self, name, description, exits, items = []):
         self.name = name
         self.description = description
         self.exits = exits
         self.items = items
-        
-    def __str__(self):
-        return self.name
 
-class Player:
-    def __init__(self, current_room, inventory):
-        self.current_room = current_room
-        self.inventory = inventory
         
-    def move(self, direction):
-        if direction in self.current_room.exits:
-            self.current_room = self.current_room.exits[direction]
-            print_location()
-        else:
-            print("You can't go that way.")
+    def display(self):
+        print(self.name)
+        print(self.description)
+        print("Exits: ")
+        for direction in self.exits:
+            print(direction)
+        if self.items:
+            print("Items: ")
+            for item in self.items:
+                print(item)
+                
+class Game():
+    def __init__(self):
+        self.rooms = []
+        self.current_room = None
+        self.inventory = []
+        
+    def add_room(self, room):
+        self.rooms.append(room)
+        
+    def start(self):
+        self.current_room = self.rooms[0]
+        self.play()
+        
+    def play(self):
+        while True:
+            self.current_room.display()
+            print("Input 'get' and then item name to pick up item.")
+            command = input("What would you like to do?\n")
             
-    def take(self, item):
-        if item in self.current_room.items:
-            self.current_room.items.remove(item)
-            self.inventory.append(item)
-            print("You take the " + item + ".")
-        else:
-            print("There is no " + item + " here.")
-            
-    def use(self, item):
-        if item in self.inventory:
-            if item == "key" and self.current_room == rooms["north_room"]:
-                print("You unlock the chest and find a treasure!")
-                time.sleep(1)
-                print("Congratulations! You win!")
-                exit(0)
+            if command in self.current_room.exits:
+                for room in self.rooms:
+                    if room.name == self.current_room.exits[command]:
+                        self.current_room = room
+                        break
+                    
+            elif command.startswith("get "):
+                item_name = command[4:]
+                
+                if item_name in self.current_room.items:
+                    self.inventory.append(item_name)
+                    self.current_room.items.remove(item_name)
+                    print(f"You have picked up {item_name}.")
+                    
+                else:
+                    print(f"{item_name} is not in this room.")
+                    
+            elif command.startswith("use "):
+                item_name = command[4:]
+                
+                if item_name == "key" and "key" in self.inventory and self.current_room.name == "Treasure Room":
+                    print("Congratulations! You have unlocked the treasure chest and found the treasure!")
+                    break
+                
+                elif item_name == "book" and "book" in self.inventory and self.current_room.name == "Library":
+                    print("You read a page of the book. It talks about an ancient potion of invisbility.\n")
+                    self.inventory.remove("book")
+                    
+                elif item_name == "coin" and "coin" in self.inventory and self.current_room.name == "Dungeon":
+                    print("You pay a man and he gives you a potion in return\n")
+                    self.inventory.remove("coin")
+                    
+                else:
+                    print("You can't use that here.")
             else:
-                print("You can't use the " + item + " here.")
-        else:
-            print("You don't have a " + item + ".")
-            
-# Define game objects and variables
-inventory = ["torch"]
-start_room = Room("Starting Room", "You are in a dimly lit room. There is a door to the north.", {"north": "north_room"}, [])
-north_room = Room("North Room", "You are in a room with a large chest in the center. There is a door to the south.", {"south": "start_room"}, ["key"])
+                print("Invalid command.")
+                
+room1 = Room("Entrance", "You are standing in front of a castle entrance.", {"north": "Foyer"})
+room2 = Room("Foyer", "You are standing in a grand foyer.", {"north": "Library", "east": "Dining Room", "south": "Entrance", "west": "Oratory"})
+room3 = Room("Library", "You are standing in a large library.", {"south": "Foyer"}, ["book"])
+room4 = Room("Dining Room", "You are standing in a spacious dining room.", {"west": "Foyer", "south": "Kitchen"}, ["key"])
+room5 = Room("Kitchen", "You are standing in a busy kitchen.", {"north": "Dining Room", "east": "Garden"}, ["food"])    
+room6 = Room("Garden", "You are standing in a beautiful garden with colorful flowers.", {"east": "Fountain", "west": "Kitchen"})
+room7 = Room("Fountain", "You are standing in front of a grand fountain.", {"west": "Garden", "north": "Bedroom"}, ["coin"])
+room8 = Room("Bedroom", "There is an empty bed that is neatly made.", {"north": "Lavatories", "south": "Fountain", "east": "Gaurdroom"})
+room9 = Room("Lavatories", "Nothing but an odd smell.", {"south": "Bedroom"})
+room10 = Room("Gaurdroom", "Full of armor and a shiny sword.", {"west": "Bedroom", "east": "Dungeon Entrance"}, ["sword"])
+room11 = Room("Oratory", "A private chapel.", {"east": "Foyer", "north": "Storeroom", "south": "Cellar"})
+room12 = Room("Storeroom", "A room full of empty shelves.", {"south": "Oratory"})
+room13 = Room("Cellar", "Full of cobwebs and unused storage space. It smells like moldy cheese.", {"north": "Oratory"})
+room14 = Room("Dungeon Entrance", "Small and steep stairs lead you down the dark dungeon.", {"": "", "": " ", "": ""})
+room15 = Room("Dungeon Cell", "You are closed off by iron bars. But wait... It looks like somebody broke through.", {"": "", "": " ", "": ""})
+room16 = Room("Torture Chamber ", "A dead man lays in a corner. There is a basket of heads near a guillotine. They look fresh.\nThere is no turning back now", {"": " ", "": ""})
+room17 = Room("Dungeon Hallway", "It is very tight and oddly quiet. It smells odd.", {"": "", "": " ", "": ""})
+room18 = Room("Sorcerers Room", "There is a powerful Sorcerer ready to kill you. You must defend yourself.", {"": "", "": " ", "": ""})
+room19 = Room("Treasure Room", "You have found the treasure room!", {}, ["treasure chest"])
 
-# Add rooms to dictionary
-rooms = {"start_room": start_room, "north_room": north_room}
+game = Game()
+game.add_room(room1)
+game.add_room(room2)
+game.add_room(room3)
+game.add_room(room4)
+game.add_room(room5)
+game.add_room(room6)
+game.add_room(room7)
+game.add_room(room8)
+game.add_room(room9)
+game.add_room(room10)
+game.add_room(room11)
+game.add_room(room12)
+game.add_room(room13)
+game.add_room(room14)
+game.add_room(room15)
+game.add_room(room16)
+game.add_room(room17)
+game.add_room(room18)
+game.add_room(room19)
 
-# Create player object
-player = Player(start_room, inventory)
-
-# Define game functions
-def print_location():
-    print(player.current_room)
-    print(player.current_room.description)
-    print("")
-
-def print_inventory():
-    print("Inventory:")
-    if len(player.inventory) == 0:
-        print("  (empty)")
-    else:
-        for item in player.inventory:
-            print("  " + item)
-    print("")
-
-# Main game loop
-while True:
-    print_location()
-    print_inventory()
-    command = input("What do you want to do? ").split()
-    
-    if len(command) == 1:
-        if command[0] == "north" or command[0] == "south":
-            player.move(command[0])
-        elif command[0] == "inventory":
-            print_inventory()
-        elif command[0] == "quit":
-            print("Thanks for playing!")
-            exit(0)
-        else:
-            print("Invalid command.")
-    elif len(command) == 2:
-        if command[0] == "take":
-            player.take(command[1])
-        elif command[0] == "use":
-            player.use(command[1])
-        else:
-            print("Invalid command.")
-    else:
-        print("Invalid command.")
+game.start()
