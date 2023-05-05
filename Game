@@ -7,7 +7,7 @@ def type_out_text(text):
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(0.05)
+        time.sleep(0.04)
     print()
 
 playerName = input("What is your name?")
@@ -24,7 +24,7 @@ To see this message again input 'help'"""
 type_out_text(instructions)
 input("Are you ready to begin this epic quest?\n")
 time.sleep(2)
-type_out_text("I don't care if you are or not because you don't really have an option...Good luck!")
+type_out_text("I don't care if you are or not because you don't really have an option...Good luck!\n")
 time.sleep(1)
 
 
@@ -39,7 +39,7 @@ class Room():
     def display(self):
         print(self.name)
         print(self.description)
-        print("Exits: ")
+        print("\nExits: ")
         for direction in self.exits:
             print(direction)
         if self.items:
@@ -63,12 +63,15 @@ class Game():
     def play(self):
         while True:
             self.current_room.display()
-            command = type_out_text("\nWhat would you like to do?\n")
+            command = input("\nWhat would you like to do?\n")
             if command in self.current_room.exits:
                  for room in self.rooms:
                     if room.name == self.current_room.exits[command]:
                         self.current_room = room
                         break
+            
+            elif command == "instructions":
+                print(instructions)
             
             elif command == "save":
                 with open("save_game.pickle", "wb") as f:
@@ -82,9 +85,6 @@ class Game():
                     type_out_text("Game loaded.")
                 except FileNotFoundError:
                     type_out_text("No save file found.")
-            
-            elif command == "instructions":
-                type_out_text(instructions)
         
             elif command.startswith("get "):
                 item_name = command[4:]
@@ -105,7 +105,7 @@ class Game():
                     break
                 
                 elif item_name == "book" and "book" in self.inventory and self.current_room.name == "Library":
-                    type_out_text("You read a page of the book. It talks about an ancient potion of invisbility.\n")
+                    type_out_text("You read a page of the book. It talks about an ancient potion of invisibility.\n")
                     self.inventory.remove("book")
                     
                 elif item_name == "food" and "food" in self.inventory and self.current_room.name == "Cellar":
@@ -133,7 +133,6 @@ class Game():
                 elif item_name == "potion" and "potion" in self.inventory:
                     type_out_text("You drink the potion. Nothing seems to have happened.\nI guess that was useless.")
                     self.inventory.remove("potion")
-                
                     
                 else:
                     type_out_text("You can't use that here.")
